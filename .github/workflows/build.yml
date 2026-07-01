@@ -16,7 +16,9 @@ jobs:
     - name: Install Tools
       run: dotnet workload install maui-android
     - name: Compile APK
-      run: dotnet publish **/OpenUtau.Mobile.csproj -f net9.0-android -c Release /p:AndroidPackageFormat=apk /p:AndroidManagedSymbols=false
+      run: |
+        PROJECT_PATH=$(find . -name "OpenUtau.Mobile.csproj" -print -quit)
+        dotnet publish "$PROJECT_PATH" -f net9.0-android -c Release /p:AndroidPackageFormat=apk /p:AndroidManagedSymbols=false
     - name: Upload Installer
       uses: actions/upload-artifact@v4
       with:
