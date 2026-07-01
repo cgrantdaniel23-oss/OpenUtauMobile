@@ -1,0 +1,24 @@
+name: Build OpenUTAU Mobile V2
+on: workflow_dispatch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: dev
+    - name: Setup .NET 9
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 9.0.x
+    - name: Install Tools
+      run: dotnet workload install maui-android
+    - name: Compile APK
+      run: dotnet publish -f net9.0-android -c Release /p:AndroidPackageFormat=apk /p:AndroidManagedSymbols=false
+    - name: Upload Installer
+      uses: actions/upload-artifact@v4
+      with:
+        name: OpenUtauMobileV2
+        path: src/OpenUtau.Mobile/bin/Release/net9.0-android/publish/*.apk
+        
